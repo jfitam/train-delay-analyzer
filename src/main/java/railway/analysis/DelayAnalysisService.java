@@ -75,6 +75,20 @@ public class DelayAnalysisService {
 	    		.map(DelayRecord::getDelay)
 	    		.sorted()
 	    		.toList();
+	    
+	    if (delays.size() == 0) { 
+		    return new Analysis(
+			        key,
+			        null,
+			        null,
+			        null,
+			        null,
+			        null,
+			        (int) group.stream().filter(DelayRecord::isStopCancelled).count(),
+			        null
+			    );
+	    	}
+	    
 	    int n = delays.size();
 	    return new Analysis(
 	        key,

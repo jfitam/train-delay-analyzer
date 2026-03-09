@@ -62,7 +62,6 @@ class CsvParserTest {
 		
 		assertEquals(2, parsed.size(), "The number of elements does not match.");
 		assertEquals("420", parsed.get(0).getTrainNumber(), "Train Number does not match.");
-		assertNull(parsed.get(0).getArrivalTime());
 		assertEquals(LocalDateTime.of(2026,1,1,2,1,0,0), parsed.get(0).getDepartureTime());
 	}
 	

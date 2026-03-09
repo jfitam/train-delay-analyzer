@@ -27,6 +27,7 @@ public class DataTable implements Consumer<DelayRecord>{
 	private Map<String, List<Integer>> indexStation;
 	private Map<String, List<Integer>> indexService;
 	private Map<String, List<Integer>> indexCompany;
+
 	
 	public DataTable() {
 		records = new ArrayList<>();
@@ -45,6 +46,7 @@ public class DataTable implements Consumer<DelayRecord>{
 		
 		//convert
 		CsvParser.parse(raw_data, this);
+		
 	}
 
 	/**
@@ -99,6 +101,7 @@ public class DataTable implements Consumer<DelayRecord>{
 
 	
 	/********************************************************************************************/
+
 	
 	/*
 	 * Add an entry to a specific index

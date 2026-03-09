@@ -55,6 +55,8 @@ public class CsvParser {
 	public static void parse(Queue<String> rawData, Consumer<DelayRecord> handler) {
 		if (rawData.isEmpty()) return;
 		
+		System.out.println("Processing data..");
+		
 		//headers map
 		HashMap<String, Integer> headerIndex = new HashMap<>();
 		String[] headers = getLine(rawData);
@@ -72,7 +74,8 @@ public class CsvParser {
 			if (line.length == 0 ) continue;
 			handler.accept(parseLine(headerIndex, line)); 
 		}
-
+		
+		System.out.println("Processed.");
 
 	}
 	
@@ -110,11 +113,7 @@ public class CsvParser {
 			    nl[headerIndex.get(SERVICE_TYPE)],
 			    nl[headerIndex.get(SERVICE_COMPANY)],
 			    nl[headerIndex.get(SERVICE_TRAIN_NUMBER)],
-			    parseBoolean(nl[headerIndex.get(SERVICE_COMPLETELY_CANCELLED)]),
-			    parseBoolean(nl[headerIndex.get(SERVICE_PARTLY_CANCELLED)]),
 			    nl[headerIndex.get(STOP_STATION_NAME)],
-			    parseDateTime(nl[headerIndex.get(STOP_ARRIVAL_TIME)]),
-			    parseInt(nl[headerIndex.get(STOP_ARRIVAL_DELAY)]),
 			    parseDateTime(nl[headerIndex.get(STOP_DEPARTURE_TIME)]),
 			    parseInt(nl[headerIndex.get(STOP_DEPARTURE_DELAY)]),
 			    parseBoolean(nl[headerIndex.get(STOP_DEPARTURE_CANCELLED)])

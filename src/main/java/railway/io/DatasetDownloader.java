@@ -56,7 +56,7 @@ public class DatasetDownloader {
 		//fetch data
 	    Queue<String> rawData = new LinkedList<>();
 		
-	    System.out.print("Reading..");
+	    System.out.println("Reading..");
 	    
         try (
             InputStream input = new FileInputStream(cache);

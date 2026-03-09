@@ -2,6 +2,8 @@ package railway.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DelayRecord {
 
@@ -9,30 +11,21 @@ public class DelayRecord {
     private String type;
     private String company;
     private String trainNumber;
-    private Boolean completelyCancelled;
-    private Boolean partlyCancelled;
-
     private String stationName;
-    private LocalDateTime arrivalTime;
-    private Integer arrivalDelay; 
     private LocalDateTime departureTime;
     private Integer departureDelay; 
     private Boolean departureCancelled;
+    
+	Map<String,String> stringPool = new HashMap<>();
 
     // Constructor
-    public DelayRecord(LocalDate date, String type, String company, String trainNumber,
-    		Boolean completelyCancelled, Boolean partlyCancelled, String stationName,
-                       LocalDateTime arrivalTime, Integer arrivalDelay,
+    public DelayRecord(LocalDate date, String type, String company, String trainNumber, String stationName,
                        LocalDateTime departureTime, Integer departureDelay, Boolean departureCancelled) {
         this.date = date;
-        this.type = type;
-        this.company = company;
-        this.trainNumber = trainNumber;
-        this.completelyCancelled = completelyCancelled;
-        this.partlyCancelled = partlyCancelled;
-        this.stationName = stationName;
-        this.arrivalTime = arrivalTime;
-        this.arrivalDelay = arrivalDelay;
+        this.type = dedup(type);
+        this.company = dedup(company);
+        this.trainNumber = dedup(trainNumber);
+        this.stationName = dedup(stationName);
         this.departureTime = departureTime;
         this.departureDelay = departureDelay;
         this.departureCancelled = departureCancelled;
@@ -41,13 +34,10 @@ public class DelayRecord {
     // Getters
     public String getTrainNumber() { return trainNumber; }
     public String getStationName() { return stationName; }
-    public LocalDateTime getArrivalTime() { return arrivalTime; }
     public LocalDateTime getDepartureTime() { return departureTime; }
 	public String getService() { return type; }
 	public String getCompany() { return company; }
 	public LocalDate getServiceDate() { return date; }
-	public boolean isServiceCompletetlyCancelled() { return completelyCancelled; }
-	public boolean isServicePartiallyCancelled() { return partlyCancelled; }
 	public boolean isStopCancelled() { return departureCancelled; }
 	public boolean isScheduled() { return (departureTime != null); }
 	public Integer getDelay() { return departureDelay != null? departureDelay: 0; }
@@ -55,9 +45,17 @@ public class DelayRecord {
 	
     @Override
     public String toString() {
-        return trainNumber + " @ " + stationName + " | Arrival: " + arrivalTime + " Delay: " + arrivalDelay +
-               " | Departure: " + departureTime + " Delay: " + departureDelay;
+        return trainNumber + " @ " + stationName + " | Departure: " + departureTime + " Delay: " + departureDelay;
     }
+    
+	/*
+	 * Check for same string in pool and point to the same object
+	 */
+	
+	String dedup(String s) {
+	    String existing = stringPool.putIfAbsent(s, s);
+	    return existing == null? s: existing;
+	}
 
 
 
