@@ -25,32 +25,43 @@ public class DatasetDownloader {
 	 */
 	public static Queue<String> fetch(String urlString) throws MalformedURLException, IOException, URISyntaxException {
 		String filename = urlString.substring(urlString.lastIndexOf('/') + 1);
-		File cache = new File("data", filename);
+		File cache = new File("src/main/resources", filename);
+		InputStream input = null;
+
+		if (cache.exists()) {
+			input = new FileInputStream(cache);
+		} else {
+			input = DatasetDownloader.class.getClassLoader().getResourceAsStream(filename);
+		}
 		
-		//download file
-		if(!cache.exists()) {
+		// download the file
+		if (input == null) {
+		    cache.getParentFile().mkdirs();
 		    try (
-		            InputStream input = new URI(urlString).toURL().openStream();
-		            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(cache))
-		        ) {
-		    		//total size
-			    	URL urlObj = new URI(urlString).toURL();
-			    	URLConnection conn = urlObj.openConnection();
-			    	int totalBytes = conn.getContentLength(); 
-			    	
-		    		//read
-		            byte[] buffer = new byte[8192];
-		            int bytesRead;
-		            int totalBytesRead = 0;
-		            
-		            while ((bytesRead = input.read(buffer)) != -1) {
-		                bos.write(buffer, 0, bytesRead);
-		                totalBytesRead += bytesRead;
-		                int percentCompleted = (int)(totalBytesRead * 100L / totalBytes);
-		                System.out.print("\rDownloading.. " + percentCompleted + "%");
+		        InputStream downloadInput = new URI(urlString).toURL().openStream();
+		        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(cache))
+		    ) {
+		        URL urlObj = new URI(urlString).toURL();
+		        URLConnection conn = urlObj.openConnection();
+		        int totalBytes = conn.getContentLength();
+
+		        byte[] buffer = new byte[8192];
+		        int bytesRead;
+		        int totalBytesRead = 0;
+		        int prevPercent = 0;
+
+		        while ((bytesRead = downloadInput.read(buffer)) != -1) {
+		            bos.write(buffer, 0, bytesRead);
+		            totalBytesRead += bytesRead;
+		            int percentCompleted = (int) (totalBytesRead * 100L / totalBytes);
+		            if (prevPercent != percentCompleted) {
+		            	System.out.print("\rDownloading.. " + percentCompleted + "%");
 		            }
 		        }
+		    }
 		    System.out.println("\rDownload completed.");
+
+		    input = new FileInputStream(cache);
 		}
 		
 		//fetch data
@@ -59,7 +70,6 @@ public class DatasetDownloader {
 	    System.out.println("Reading..");
 	    
         try (
-            InputStream input = new FileInputStream(cache);
             GZIPInputStream gzip = new GZIPInputStream(input);
             InputStreamReader reader = new InputStreamReader(gzip);
             BufferedReader br = new BufferedReader(reader)

@@ -56,6 +56,8 @@ public class CsvParser {
 		if (rawData.isEmpty()) return;
 		
 		System.out.println("Processing data..");
+		final Long totalLines = (long) rawData.size();
+		long processedLines = 0;
 		
 		//headers map
 		HashMap<String, Integer> headerIndex = new HashMap<>();
@@ -71,11 +73,16 @@ public class CsvParser {
 		//process
 		String[] line;
 		while ((line = getLine(rawData)) != null) {
+			processedLines += 1;
 			if (line.length == 0 ) continue;
-			handler.accept(parseLine(headerIndex, line)); 
+			handler.accept(parseLine(headerIndex, line));
+			
+			if (processedLines%100000 == 0) {
+				System.out.print("\rProcessing data.. (" + processedLines + "/" + totalLines + ")");
+			}
 		}
 		
-		System.out.println("Processed.");
+		System.out.println("\rProcessed.");
 
 	}
 	

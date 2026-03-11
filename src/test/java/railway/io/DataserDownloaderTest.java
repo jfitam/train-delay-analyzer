@@ -29,7 +29,7 @@ class DataserDownloaderTest {
 	@Test
 	void fileIsCachedAfterRequest() throws Exception {
 
-	    File cache = new File("data", filename);
+	    File cache = new File("src/main/resources", filename);
 
 	    DatasetDownloader.fetch(testUrl);
 

@@ -48,6 +48,8 @@ Clone the repository:
 git clone <repo_url>
 cd train-delay-analyzer
 ```
+
+### With Maven
 Build with Maven:
 ```code
 mvn clean install
@@ -56,8 +58,18 @@ Run the Spring Boot application:
 ```code
 mvn spring-boot:run
 ```
-First startup may take ~2 minutes to download and process the dataset (~5 GB).
-Subsequent API queries are served from memory.
+
+### With Docker
+Additionally, a docker container is prepared in the root to run the API.
+Build with Docker:
+```code
+docker build -t train-delay-analyzer .
+```
+
+And run:
+```code
+docker run  -d -p 8080:8080 -t train-delay-analyzer
+```
 
 ## Tests
 

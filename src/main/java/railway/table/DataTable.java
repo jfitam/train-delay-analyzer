@@ -41,11 +41,13 @@ public class DataTable implements Consumer<DelayRecord>{
 	@PostConstruct
 	private void load_data() throws MalformedURLException, IOException, URISyntaxException {
 		//fetch
-		String url = "https://opendata.rijdendetreinen.nl/public/services/services-2025.csv.gz";			
-		Queue<String> raw_data = (Queue<String>) DatasetDownloader.fetch(url);
+		String url = "https://opendata.rijdendetreinen.nl/public/services/services-2026-01.csv.gz";			
+		Queue<String> rawData = (Queue<String>) DatasetDownloader.fetch(url);
+		
+		System.out.println("Entries loaded in memory: " + rawData.size());
 		
 		//convert
-		CsvParser.parse(raw_data, this);
+		CsvParser.parse(rawData, this);
 		
 	}
 
