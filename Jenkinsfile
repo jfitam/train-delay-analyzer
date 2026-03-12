@@ -1,10 +1,21 @@
 pipeline {
-    agent { docker { image 'maven:3.9.13-eclipse-temurin-21-alpine' } }
+    agent any  
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                sh 'mvn --version'
+                sh 'mvn clean install'  
             }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'        
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'target/**/*.jar', fingerprint: true
+            junit 'target/surefire-reports/**/*.xml'
         }
     }
 }
