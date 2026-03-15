@@ -13,8 +13,8 @@ public enum AggregationLevel {
     public final Function<DelayRecord, String> keyExtractor;
     public final String kind;
 
-    AggregationLevel(String kind, Function<DelayRecord, String> keyExtractor) {
-    	this.kind = kind;
-        this.keyExtractor = keyExtractor;
+    AggregationLevel(String newKind, Function<DelayRecord, String> newKeyExtractor) {
+    	this.kind = newKind;
+        this.keyExtractor = newKeyExtractor;
     }
 }

@@ -12,46 +12,120 @@ import railway.table.AggregationLevel;
 import railway.table.DataTable;
 
 @Service
-public class DelayAnalysisService {
+final public class DelayAnalysisService {
+	private DataTable storage; 
 	
-	DataTable storage; 
-	
+	/**
+	 * Constructor
+	 * @param storage
+	 */
 	@Autowired
 	public DelayAnalysisService(DataTable storage) {
 		this.storage = storage;
 	}
 	
+	/**
+	 * Perform Analysis for all trains
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getAllTrains() {
-		return computeStatistics(storage.getAll(), AggregationLevel.TRAIN_SERVICE);
+		return computeStatistics(
+				storage.getAll(), 
+				AggregationLevel.TRAIN_SERVICE
+				);
 	}
 
-
+	/**
+	 * Perform Analysis for specific train
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getTrain(String trainNumber) {
-		return computeStatistics(storage.get(trainNumber, null, null, null), AggregationLevel.TRAIN_SERVICE);
+		return computeStatistics(
+				storage.get(
+						trainNumber, 
+						null, 
+						null, 
+						null), 
+				AggregationLevel.TRAIN_SERVICE
+				);
 	}
 
+	/**
+	 * Perform Analysis for all stations
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getAllStations() {
-		return computeStatistics(storage.getAll(), AggregationLevel.STATION);
+		return computeStatistics(
+				storage.getAll(), 
+				AggregationLevel.STATION
+				);
 	}
 
+	/**
+	 * Perform Analysis for specific station
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getStation(String stationName) {
-		return computeStatistics(storage.get(null, stationName, null, null), AggregationLevel.STATION);
+		return computeStatistics(
+				storage.get(
+						null, 
+						stationName, 
+						null, 
+						null), 
+				AggregationLevel.STATION
+				);
 	}
 
+	/**
+	 * Perform Analysis for all services
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getAllServices() {
-		return computeStatistics(storage.getAll(), AggregationLevel.SERVICE);
+		return computeStatistics(
+				storage.getAll(), 
+				AggregationLevel.SERVICE
+				);
 	}
 
+	/**
+	 * Perform Analysis for specific service
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getServices(String serviceName) {
-		return computeStatistics(storage.get(null, null, serviceName, null), AggregationLevel.SERVICE);
+		return computeStatistics(
+				storage.get(
+						null, 
+						null, 
+						serviceName, 
+						null), 
+				AggregationLevel.SERVICE
+				);
 	}
-
+	
+	/**
+	 * Perform Analysis for all companies
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getAllCompanies() {
-		return computeStatistics(storage.getAll(), AggregationLevel.COMPANY);
+		return computeStatistics(
+				storage.getAll(), 
+				AggregationLevel.COMPANY
+				);
 	}
 
+	/**
+	 * Perform Analysis for specific company
+	 * @return AnalysisResult 
+	 */
 	public AnalysisResult getCompany(String companyName) {
-		return computeStatistics(storage.get(null, null, null, companyName), AggregationLevel.COMPANY);
+		return computeStatistics(
+				storage.get(
+						null, 
+						null, 
+						null, 
+						companyName), 
+				AggregationLevel.COMPANY
+				);
 	}
 
 
@@ -93,10 +167,10 @@ public class DelayAnalysisService {
 	    return new Analysis(
 	        key,
 	        delays.get(0),
-	        delays.get(Math.max(0, n/4-1)),
-	        delays.get(Math.max(0,n/2-1)),
-	        delays.get(Math.max(0,3*n/4-1)),
-	        delays.get(Math.max(0,n-1)),
+	        delays.get(Math.max(0, n / 4 - 1 )),
+	        delays.get(Math.max(0, n / 2 - 1 )),
+	        delays.get(Math.max(0, 3 * n / 4 - 1 )),
+	        delays.get(Math.max(0, n - 1 )),
 	        (int) group.stream().filter(DelayRecord::isStopCancelled).count(),
 	        group.stream().filter(DelayRecord::isDelayed).count() * 100.0 / n
 	    );

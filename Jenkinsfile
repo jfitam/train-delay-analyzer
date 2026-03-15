@@ -1,25 +1,30 @@
 pipeline {
-    agent any  
+    agent any
     
     tools {
-		maven 'Maven3'
+      maven 'Maven3'
 	}
-    
+	
     stages {
-        stage('Build') {
+        stage('Build') { steps { sh 'mvn clean install' } }
+        stage('Test') { steps { sh 'mvn test' } }
+        stage('Checkstyle') { steps { sh 'mvn checkstyle:check' } }
+        stage('Package') { steps { sh 'mvn package' } }
+        stage('Manual Approval') {
             steps {
-                sh 'mvn clean install'  
+                input message: '¿Proceed with deployment?', ok: 'Yes, deploy'
             }
         }
-        stage('Test') {
+
+        stage('Publish / Deploy') {
             steps {
-                sh 'mvn test'        
+                echo 'deployment not setup'
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'target/**/*.jar', fingerprint: true
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             junit 'target/surefire-reports/**/*.xml'
         }
     }

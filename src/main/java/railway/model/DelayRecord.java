@@ -7,20 +7,24 @@ import java.util.Map;
 
 public class DelayRecord {
 
-    private LocalDate date;
-    private String type;
-    private String company;
-    private String trainNumber;
-    private String stationName;
-    private LocalDateTime departureTime;
-    private Integer departureDelay; 
-    private Boolean departureCancelled;
+    final private LocalDate date;
+    final private String type;
+    final private String company;
+    final private String trainNumber;
+    final private String stationName;
+    final private LocalDateTime departureTime;
+    final private Integer departureDelay; 
+    final private Boolean departureCancelled;
     
-	Map<String,String> stringPool = new HashMap<>();
+	final private Map<String, String> stringPool = new HashMap<>();
 
     // Constructor
-    public DelayRecord(LocalDate date, String type, String company, String trainNumber, String stationName,
-                       LocalDateTime departureTime, Integer departureDelay, Boolean departureCancelled) {
+    public DelayRecord(
+    		LocalDate date, String type, String company, 
+    		String trainNumber, String stationName, 
+    		LocalDateTime departureTime, Integer departureDelay,
+    		Boolean departureCancelled
+    		) {
         this.date = date;
         this.type = dedup(type);
         this.company = dedup(company);
@@ -51,7 +55,6 @@ public class DelayRecord {
 	/*
 	 * Check for same string in pool and point to the same object
 	 */
-	
 	String dedup(String s) {
 	    String existing = stringPool.putIfAbsent(s, s);
 	    return existing == null? s: existing;

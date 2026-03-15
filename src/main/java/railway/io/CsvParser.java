@@ -18,6 +18,7 @@ import railway.model.DelayRecord;
  * DelayRecord objects.
  */
 public class CsvParser {
+	private CsvParser() { }
 	
     // Service fields
     public static final String SERVICE_RDT_ID = "Service:RDT-ID";
@@ -60,10 +61,10 @@ public class CsvParser {
 		long processedLines = 0;
 		
 		//headers map
-		HashMap<String, Integer> headerIndex = new HashMap<>();
+		final HashMap<String, Integer> headerIndex = new HashMap<>();
 		String[] headers = getLine(rawData);
 		
-		for(int i = 0; i < headers.length; i++) {
+		for (int i = 0; i < headers.length; i++) {
 			headerIndex.put(headers[i], i);
 		}
 		
@@ -74,11 +75,13 @@ public class CsvParser {
 		String[] line;
 		while ((line = getLine(rawData)) != null) {
 			processedLines += 1;
-			if (line.length == 0 ) continue;
+			if (line.length == 0) { continue; }
 			handler.accept(parseLine(headerIndex, line));
 			
 			if (processedLines%100000 == 0) {
-				System.out.print("\rProcessing data.. (" + processedLines + "/" + totalLines + ")");
+				System.out.print(
+						"\rProcessing data.. (" + processedLines + "/" + totalLines + ")"
+						);
 			}
 		}
 		
@@ -89,8 +92,8 @@ public class CsvParser {
 	private static String[] getLine(Queue<String> rawData) {
 		String next = rawData.poll();
 		
-		if(next == null) return null;
-		if(next.isEmpty()) return new String[0];
+		if (next == null) { return null; }
+		if (next.isEmpty()) { return new String[0]; }
 
 		String[] parts = next.replaceAll("(\\r|\\n)", "").split(",", -1);
 		return parts;
@@ -107,8 +110,8 @@ public class CsvParser {
 	        STOP_PLATFORM_CHANGE, STOP_PLANNED_PLATFORM, STOP_ACTUAL_PLATFORM
 	    };
 
-	    for(int i = 0; i < required.length; i++) {
-	    	if(!headerIndex.containsKey(required[i])) {
+	    for (int i = 0; i < required.length; i++) {
+	    	if (!headerIndex.containsKey(required[i])) {
 				throw new IllegalArgumentException("Headers miss field '" + required[i] + "'");
 	    	}
 	    }
@@ -128,12 +131,12 @@ public class CsvParser {
 	}
 
 	private static LocalDate parseDate(String datetStr) {
-        if(datetStr == null || datetStr.isEmpty()) return null;
+        if (datetStr == null || datetStr.isEmpty()) { return null; }
         return LocalDate.parse(datetStr, DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 
 	private static LocalDateTime parseDateTime(String datetimeStr) {
-        if(datetimeStr == null || datetimeStr.isEmpty()) return null;
+        if (datetimeStr == null || datetimeStr.isEmpty()) { return null; }
         OffsetDateTime odt = OffsetDateTime.parse(datetimeStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         return odt.toLocalDateTime();
     }

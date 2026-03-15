@@ -9,5 +9,4 @@ public record Analysis(
 		Integer maximumDelay,
 		long  numStopsCancelled,
 		Double percentageDelay
-		
-) {}
+) { }
