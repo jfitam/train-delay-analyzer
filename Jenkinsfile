@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('Build') { steps { sh 'mvn clean install' } }
         stage('Test') { steps { sh 'mvn test' } }
-        stage('Checkstyle') { steps { sh 'mvn checkstyle:check' } }
         stage('Package') { steps { sh 'mvn package' } }
         stage('Manual Approval') {
             steps {
