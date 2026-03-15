@@ -11,7 +11,7 @@ pipeline {
         stage('Package') { steps { sh 'mvn package' } }
         stage('Manual Approval') {
             steps {
-                input message: '¿Proceed with deployment?', ok: 'Yes, deploy'
+                input message: 'Proceed with deployment?', ok: 'Yes, deploy'
             }
         }
 
